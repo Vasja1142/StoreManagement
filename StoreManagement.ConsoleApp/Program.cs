@@ -1,6 +1,7 @@
 ﻿// Файл: StoreManagement.ConsoleApp/Program.cs
-using StoreManagement.ConsoleApp.Demos;
+// using StoreManagement.ConsoleApp.Demos; // Больше не нужны демо-классы напрямую
 using System;
+using System.Text; // Для Encoding
 
 namespace StoreManagement.ConsoleApp
 {
@@ -8,25 +9,19 @@ namespace StoreManagement.ConsoleApp
     {
         static void Main(string[] args)
         {
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Console.InputEncoding = System.Text.Encoding.UTF8;
+            // Установка кодировки для корректного отображения
+            Console.OutputEncoding = Encoding.UTF8;
+            // Для корректного ввода с консоли тоже может понадобиться
+            // Console.InputEncoding = Encoding.UTF8; // Раскомментировать при необходимости
 
-            //Console.WriteLine("Запуск демонстрации Лабораторной Работы №10...");
-            //Lab10Demo.Run();
-            //Console.WriteLine("\n===============================================\n");
+            Console.WriteLine("Запуск приложения управления коллекцией...");
 
-            //Console.WriteLine("Запуск демонстрации Лабораторной Работы №12...");
-            //Lab12Demo.Run();
-            //Console.WriteLine("\n===============================================\n");
+            // Создаем и запускаем главное меню приложения
+            ApplicationMenu menu = new ApplicationMenu();
+            menu.Run();
 
-            //Console.WriteLine("Запуск демонстрации Лабораторной Работы №13...");
-            //Lab13Demo.Run();
-            //Console.WriteLine("\n===============================================\n");
-
-            Console.WriteLine("Запуск демонстрации Лабораторной Работы №14...");
-            Lab14Demo.Run(); 
-
-            Console.WriteLine("\nНажмите любую клавишу для выхода...");
+            // Сообщение после выхода из меню Run()
+            Console.WriteLine("\nРабота приложения завершена. Нажмите любую клавишу для закрытия окна.");
             Console.ReadKey();
         }
     }

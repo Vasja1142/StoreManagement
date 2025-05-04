@@ -1,70 +1,36 @@
-﻿// Файл: StoreManagement.Domain/Goods.cs
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using StoreManagement.Domain.Interfaces; // Для [MaybeNullWhen]
+using System.Xml.Serialization; // Для XmlInclude
+using StoreManagement.Domain.Interfaces;
+#if NET7_0_OR_GREATER
+using System.Text.Json.Serialization;
+#endif
 
 namespace StoreManagement.Domain
 {
-    /// <summary>
-    /// Абстрактный базовый класс для всех товаров.
-    /// Реализует базовую функциональность, сравнение и клонирование.
-    /// </summary>
+    [Serializable]
+    // Атрибуты для поддержки полиморфизма при XML-сериализации
+    [XmlInclude(typeof(Product))]
+    [XmlInclude(typeof(DairyProduct))]
+    [XmlInclude(typeof(Toy))]
+    // Атрибуты для поддержки полиморфизма при JSON-сериализации (System.Text.Json) в .NET 7+
+#if NET7_0_OR_GREATER
+    [JsonDerivedType(typeof(Product), typeDiscriminator: "product")]
+    [JsonDerivedType(typeof(DairyProduct), typeDiscriminator: "dairy")]
+    [JsonDerivedType(typeof(Toy), typeDiscriminator: "toy")]
+#endif 
     public abstract class Goods : IInit, IComparable<Goods>, ICloneable
     {
         // Статический генератор случайных чисел для RandomInit
         public static Random random = new Random();
 
-        protected string _name = "Без имени";
-        protected decimal _price;
-        protected string _manufacturer = "Неизвестен";
+        //protected string _name = "Без имени";
+        //protected decimal _price;
+        //protected string _manufacturer = "Неизвестен";
 
-        /// <summary>
-        /// Название товара. Не может быть пустым.
-        /// </summary>
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentException("Название товара не может быть пустым.", nameof(Name));
-                }
-                _name = value;
-            }
-        }
-
-        /// <summary>
-        /// Цена товара. Должна быть больше нуля.
-        /// </summary>
-        public decimal Price
-        {
-            get => _price;
-            set
-            {
-                if (value <= 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(Price), "Цена должна быть положительным числом.");
-                }
-                _price = value;
-            }
-        }
-
-        /// <summary>
-        /// Производитель товара. Не может быть пустым.
-        /// </summary>
-        public string Manufacturer
-        {
-            get => _manufacturer;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentException("Производитель не может быть пустым.", nameof(Manufacturer));
-                }
-                _manufacturer = value;
-            }
-        }
+        public string Name { get; set; } = "Без имени"; 
+        public decimal Price { get; set; } 
+        public string Manufacturer { get; set; } = "Неизвестен"; 
 
         // --- Конструкторы ---
 

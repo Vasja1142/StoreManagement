@@ -6,6 +6,8 @@ namespace StoreManagement.Domain
     /// <summary>
     /// Представляет продукт питания, наследуется от Товара.
     /// </summary>
+    [Serializable]
+
     public class Product : Goods
     {
         protected DateTime _expirationDate;

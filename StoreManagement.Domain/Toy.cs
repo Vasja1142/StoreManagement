@@ -6,45 +6,13 @@ namespace StoreManagement.Domain
     /// <summary>
     /// Представляет игрушку, наследуется от Товара.
     /// </summary>
+    [Serializable]
     public class Toy : Goods
     {
-        protected int _ageRestriction;
-        protected string _material = "Не указан";
-
-        /// <summary>
-        /// Возрастное ограничение (например, 3+ означает 3). Не может быть отрицательным.
-        /// </summary>
-        public int AgeRestriction
-        {
-            get => _ageRestriction;
-            set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(AgeRestriction), "Возрастное ограничение не может быть отрицательным.");
-                }
-                _ageRestriction = value;
-            }
-        }
-
-        /// <summary>
-        /// Материал, из которого сделана игрушка. Не может быть пустым.
-        /// </summary>
-        public string Material
-        {
-            get => _material;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentException("Материал не может быть пустым.", nameof(Material));
-                }
-                _material = value;
-            }
-        }
-
-        // --- Конструкторы ---
-
+ 
+        public int AgeRestriction { get; set; }
+        public string Material { get; set; } = "Не указан";
+        
         public Toy() : base() { }
 
         public Toy(string name, decimal price, string manufacturer, int ageRestriction, string material)

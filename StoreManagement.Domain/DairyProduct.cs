@@ -6,42 +6,12 @@ namespace StoreManagement.Domain
     /// <summary>
     /// Представляет молочный продукт, наследуется от Продукта.
     /// </summary>
+    [Serializable]
     public class DairyProduct : Product
     {
-        protected double _fatContent;
-        protected double _volume;
-
-        /// <summary>
-        /// Жирность продукта (в процентах). Не может быть отрицательной.
-        /// </summary>
-        public double FatContent
-        {
-            get => _fatContent;
-            set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(FatContent), "Жирность не может быть отрицательной.");
-                }
-                _fatContent = value;
-            }
-        }
-
-        /// <summary>
-        /// Объем продукта (например, в литрах). Должен быть положительным.
-        /// </summary>
-        public double Volume
-        {
-            get => _volume;
-            set
-            {
-                if (value <= 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(Volume), "Объем должен быть положительным.");
-                }
-                _volume = value;
-            }
-        }
+  
+        public double FatContent { get; set; }
+        public double Volume { get; set; }     
 
         // --- Конструкторы ---
 
