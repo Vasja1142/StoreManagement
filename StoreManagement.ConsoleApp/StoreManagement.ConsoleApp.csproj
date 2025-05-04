@@ -13,8 +13,4 @@
     <ProjectReference Include="..\StoreManagement.Services\StoreManagement.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Demos\" />
-  </ItemGroup>
-
 </Project>
