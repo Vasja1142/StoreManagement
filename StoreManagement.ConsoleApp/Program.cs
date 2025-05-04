@@ -15,8 +15,12 @@ namespace StoreManagement.ConsoleApp
             //Lab10Demo.Run();
             //Console.WriteLine("\n===============================================\n");
 
-            Console.WriteLine("Запуск демонстрации Лабораторной Работы №12...");
-            Lab12Demo.Run();
+            //Console.WriteLine("Запуск демонстрации Лабораторной Работы №12...");
+            //Lab12Demo.Run();
+            //Console.WriteLine("\n===============================================\n");
+
+            Console.WriteLine("Запуск демонстрации Лабораторной Работы №13...");
+            Lab13Demo.Run();
 
             Console.WriteLine("\nНажмите любую клавишу для выхода...");
             Console.ReadKey();

@@ -31,7 +31,7 @@ namespace StoreManagement.ConsoleApp.Demos
         }
 
         // --- Метод для создания случайного товара ---
-        private static Goods CreateRandomGoods()
+        public static Goods CreateRandomGoods()
         {
             Goods newItem;
             int typeChoice = Goods.random.Next(3);
