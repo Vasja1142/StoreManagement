@@ -15,11 +15,6 @@ namespace StoreManagement.ConsoleApp.Demos
         {
             Console.WriteLine("\n===== Демонстрация ЛР №12: Пользовательские коллекции =====");
 
-            // --- Демонстрация DoublyLinkedList<Goods> ---
-            DemonstrateDoublyLinkedList();
-
-            // --- Демонстрация BinaryTree<Goods> ---
-            DemonstrateBinaryTree();
 
             // --- Демонстрация HashTable<string, Goods> ---
             DemonstrateHashTable();
@@ -48,77 +43,9 @@ namespace StoreManagement.ConsoleApp.Demos
             return newItem;
         }
 
-        // --- Демонстрация DoublyLinkedList<Goods> ---
-        private static void DemonstrateDoublyLinkedList()
-        {
-            Console.WriteLine("\n--- 1. Демонстрация DoublyLinkedList<Goods> ---");
-            DoublyLinkedList<Goods> goodsList = new DoublyLinkedList<Goods>();
+  
 
-            // Заполнение списка
-            Console.WriteLine("\n* Заполнение списка 5 случайными товарами:");
-            Goods? firstItem = null;
-            for (int i = 0; i < 5; i++)
-            {
-                var newItem = CreateRandomGoods();
-                if (i == 0) firstItem = newItem; // Запомним первый добавленный
-                goodsList.Add(newItem);
-            }
-            goodsList.Print();
-
-            // Удаление первого элемента с заданным именем (Вариант 7)
-            if (firstItem != null)
-            {
-                Console.WriteLine($"\n* Удаление первого элемента с именем '{firstItem.Name}' (Вариант 7):");
-                bool removed = goodsList.RemoveFirstByName(firstItem.Name);
-                Console.WriteLine(removed ? "Элемент успешно удален." : "Элемент с таким именем не найден.");
-                goodsList.Print();
-            }
-            else
-            {
-                Console.WriteLine("\n* Не удалось получить имя первого элемента для теста удаления.");
-            }
-
-            // Попытка удаления несуществующего имени
-            string nonExistentName = "НесуществующийТовар123";
-            Console.WriteLine($"\n* Попытка удаления элемента с именем '{nonExistentName}':");
-            bool removedNonExistent = goodsList.RemoveFirstByName(nonExistentName);
-            Console.WriteLine(removedNonExistent ? "Ошибка: удален несуществующий элемент." : "Элемент с таким именем не найден (ожидаемо).");
-            goodsList.Print();
-
-
-            // Очистка списка
-            Console.WriteLine("\n* Очистка списка:");
-            goodsList.Clear();
-            goodsList.Print();
-        }
-
-        // --- Демонстрация BinaryTree<Goods> ---
-        private static void DemonstrateBinaryTree()
-        {
-            Console.WriteLine("\n--- 2. Демонстрация BinaryTree<Goods> ---");
-
-            // Создание идеально сбалансированного дерева
-            Console.WriteLine("\n* Создание идеально сбалансированного дерева из 7 элементов:");
-            BinaryTree<Goods> goodsTree = new BinaryTree<Goods>();
-            goodsTree.BuildBalancedTree(7, CreateRandomGoods); // Используем метод создания как фабрику
-            goodsTree.PrintInOrder(); // Вывод в симметричном порядке
-
-            // Подсчет элементов, имя которых начинается с символа (Вариант 7)
-            char searchChar = 'М'; // Пример символа
-            Console.WriteLine($"\n* Поиск количества элементов, имя которых начинается на '{searchChar}' (Вариант 7):");
-            int count = goodsTree.CountNodesWithNameStartingWith(searchChar);
-            Console.WriteLine($"Найдено элементов: {count}");
-
-            // Преобразование в дерево поиска
-            Console.WriteLine("\n* Преобразование в Бинарное Дерево Поиска (сортировка по цене):");
-            goodsTree.ConvertToSearchTree();
-            goodsTree.PrintInOrder(); // Вывод BST должен быть отсортирован по цене (IComparable)
-
-            // Очистка дерева
-            Console.WriteLine("\n* Очистка дерева:");
-            goodsTree.Clear();
-            goodsTree.PrintInOrder();
-        }
+      
 
         // --- Демонстрация HashTable<string, Goods> ---
         private static void DemonstrateHashTable()

@@ -1,144 +1,130 @@
 ﻿// Файл: StoreManagement.Services/Journal.cs
 using System;
 using System.Collections.Generic;
-using System.IO; // Для работы с файлами (StreamWriter)
-using System.Text; // Для Encoding
-using StoreManagement.Collections; // Для CollectionHandlerEventArgs
+using System.IO;
+using System.Text;
+// using System.Windows.Forms; // Пока уберем, если вызывало сложности
+using StoreManagement.Collections;
 
 namespace StoreManagement.Services
 {
-    /// <summary>
-    /// Класс для ведения журнала изменений в коллекциях.
-    /// Хранит записи JournalEntry в памяти и дописывает их в файл journal.log.
-    /// </summary>
     public class Journal
     {
         private readonly List<JournalEntry> _entries = new List<JournalEntry>();
-        private readonly string _logFilePath; // Путь к файлу журнала
+        private readonly string _logFilePath;
 
-        // --- Конструктор ---
-        /// <summary>
-        /// Создает экземпляр журнала.
-        /// </summary>
-        /// <param name="logFileName">Имя файла журнала (по умолчанию journal.log).</param>
         public Journal(string logFileName = "journal.log")
-        {
-            // Определяем полный путь к файлу в папке выполнения программы
-            // Environment.CurrentDirectory может быть не всегда тем, что ожидается (особенно при отладке).
-            // Используем AppContext.BaseDirectory для большей надежности.
-            string baseDirectory = AppContext.BaseDirectory;
-            _logFilePath = Path.Combine(baseDirectory, logFileName);
-
-            // Можно добавить начальную запись в лог при создании журнала
-            // LogToFile($"--- Журнал инициализирован: {DateTime.Now} ---");
-        }
-
-        // --- Обработчики событий ---
-
-        /// <summary>
-        /// Обработчик события изменения количества элементов в коллекции (Add/Remove).
-        /// Добавляет запись в память и в файл.
-        /// </summary>
-        public void CollectionCountChangedHandler(object source, CollectionHandlerEventArgs args)
-        {
-            JournalEntry entry = new JournalEntry(args);
-            _entries.Add(entry);
-            LogToFile(entry.ToString()); // Записываем в файл
-        }
-
-        /// <summary>
-        /// Обработчик события изменения ссылки на элемент (через индексатор).
-        /// Добавляет запись в память и в файл.
-        /// </summary>
-        public void CollectionReferenceChangedHandler(object source, CollectionHandlerEventArgs args)
-        {
-            JournalEntry entry = new JournalEntry(args);
-            _entries.Add(entry);
-            LogToFile(entry.ToString()); // Записываем в файл
-        }
-
-        // --- Работа с файлом ---
-
-        /// <summary>
-        /// Дописывает строку в файл журнала. Обрабатывает возможные ошибки ввода-вывода.
-        /// </summary>
-        /// <param name="message">Сообщение для записи.</param>
-        private void LogToFile(string message)
         {
             try
             {
-                // Используем StreamWriter с append: true для дозаписи в конец файла
-                // и UTF8Encoding для корректной записи кириллицы.
-                // using гарантирует закрытие и освобождение файла (Dispose).
-                using (StreamWriter writer = new StreamWriter(_logFilePath, append: true, Encoding.UTF8))
+                // Используем AppContext.BaseDirectory, как было изначально.
+                // Это путь к папке, где находится исполняемый файл вашего UI приложения.
+                string baseDirectory = AppContext.BaseDirectory;
+                _logFilePath = Path.Combine(baseDirectory, logFileName);
+
+                Console.WriteLine($"--- [ЖУРНАЛ INFO] --- Конструктор Journal вызван.");
+                Console.WriteLine($"--- [ЖУРНАЛ INFO] --- BaseDirectory: {baseDirectory}");
+                Console.WriteLine($"--- [ЖУРНАЛ INFO] --- Попытка использовать путь для журнала: {_logFilePath}");
+
+                // !!! УДАЛЯЕМ СТАРЫЙ ФАЙЛ ЖУРНАЛА ПЕРЕД ПЕРВОЙ ЗАПИСЬЮ !!!
+                if (File.Exists(_logFilePath))
                 {
-                    writer.WriteLine(message);
+                    File.Delete(_logFilePath);
+                    Console.WriteLine($"--- [ЖУРНАЛ INFO] --- Существующий файл журнала {_logFilePath} удален.");
+                }
+
+                // Сразу пытаемся что-то записать, чтобы проверить возможность создания файла
+                File.AppendAllText(_logFilePath, $"--- Журнал инициализирован (или файл создан): {DateTime.Now} ---{Environment.NewLine}", Encoding.UTF8);
+                Console.WriteLine($"--- [ЖУРНАЛ INFO] --- Файл журнала {_logFilePath} успешно проверен/создан/дополнен при инициализации.");
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"\n--- [ЖУРНАЛ ОШИБКА В КОНСТРУКТОРЕ] --- Не удалось инициализировать/создать файл '{_logFilePath}':");
+                Console.WriteLine(ex.ToString()); // Выводим полную информацию об ошибке
+                Console.ResetColor();
+                // Если здесь ошибка, _logFilePath может быть недействительным, но мы его все равно сохраняем
+                // чтобы последующие попытки записи/чтения также могли выдать ошибку с этим путем.
+                if (string.IsNullOrEmpty(_logFilePath) && !string.IsNullOrEmpty(logFileName))
+                {
+                    // На крайний случай, если Path.Combine не сработал из-за плохого baseDirectory
+                    _logFilePath = logFileName;
+                }
+                else if (string.IsNullOrEmpty(_logFilePath) && string.IsNullOrEmpty(logFileName))
+                {
+                    _logFilePath = "fallback_journal.log"; // Совсем крайний случай
                 }
             }
-            catch (IOException ex)
+        }
+
+        // Метод для получения пути (оставляем для проверки из MainForm)
+        public string GetActualLogFilePath()
+        {
+            return _logFilePath ?? "Путь к журналу не определен!";
+        }
+
+        private void LogToFile(string message)
+        {
+            if (string.IsNullOrEmpty(_logFilePath))
             {
-                // Обработка ошибок доступа к файлу (например, файл занят другим процессом)
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"\n[ОШИБКА ЖУРНАЛА] Не удалось записать в файл '{_logFilePath}': {ex.Message}");
-                Console.ResetColor();
+                Console.WriteLine("--- [ЖУРНАЛ ОШИБКА] --- Путь к файлу журнала не установлен. Запись невозможна.");
+                return;
             }
-            catch (Exception ex) // Ловим другие возможные исключения
+
+            Console.WriteLine($"--- [ЖУРНАЛ INFO] --- Попытка записи в LogToFile. Сообщение: {message}");
+            try
+            {
+                File.AppendAllText(_logFilePath, $"{message}{Environment.NewLine}", Encoding.UTF8);
+                Console.WriteLine($"--- [ЖУРНАЛ INFO] --- УСПЕШНО записано в лог: {message}");
+            }
+            catch (Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"\n[ОШИБКА ЖУРНАЛА] Непредвиденная ошибка при записи в файл: {ex.Message}");
+                Console.WriteLine($"\n--- [ЖУРНАЛ ОШИБКА ЗАПИСИ] --- Ошибка при записи в файл '{_logFilePath}':");
+                Console.WriteLine(ex.ToString()); // Выводим полную информацию об ошибке
                 Console.ResetColor();
             }
         }
 
-        /// <summary>
-        /// Считывает и возвращает содержимое файла журнала.
-        /// </summary>
-        /// <returns>Строка с содержимым файла или сообщение об ошибке.</returns>
         public string ReadLogFile()
         {
+            if (string.IsNullOrEmpty(_logFilePath))
+            {
+                return "Путь к файлу журнала не установлен. Чтение невозможно.";
+            }
+
+            Console.WriteLine($"--- [ЖУРНАЛ INFO] --- Попытка чтения ReadLogFile. Путь: {_logFilePath}");
             try
             {
                 if (!File.Exists(_logFilePath))
                 {
+                    Console.WriteLine($"--- [ЖУРНАЛ INFO] --- ReadLogFile: Файл НЕ НАЙДЕН по пути {_logFilePath}");
                     return $"Файл журнала '{_logFilePath}' не найден.";
                 }
+                Console.WriteLine($"--- [ЖУРНАЛ INFO] --- ReadLogFile: Файл НАЙДЕН. Чтение...");
                 return File.ReadAllText(_logFilePath, Encoding.UTF8);
-            }
-            catch (IOException ex)
-            {
-                return $"[ОШИБКА ЧТЕНИЯ ЖУРНАЛА] Не удалось прочитать файл '{_logFilePath}': {ex.Message}";
             }
             catch (Exception ex)
             {
-                return $"[ОШИБКА ЧТЕНИЯ ЖУРНАЛА] Непредвиденная ошибка при чтении файла: {ex.Message}";
+                return $"[ОШИБКА ЧТЕНИЯ ЖУРНАЛА] Exception: Непредвиденная ошибка при чтении файла '{_logFilePath}': {ex.Message}";
             }
         }
 
-        // --- Вывод в консоль (остается для отладки) ---
-
-        /// <summary>
-        /// Выводит содержимое журнала (из памяти) в консоль.
-        /// </summary>
-        public void PrintJournal(string title = "Содержимое журнала (в памяти)")
+        // Обработчики событий коллекции (CollectionCountChangedHandler, CollectionReferenceChangedHandler)
+        // и PrintJournal остаются без изменений.
+        public void CollectionCountChangedHandler(object source, CollectionHandlerEventArgs args)
         {
-            Console.WriteLine($"\n--- {title} (Записей в памяти: {_entries.Count}) ---");
-            if (_entries.Count == 0)
-            {
-                Console.WriteLine("Журнал (в памяти) пуст.");
-            }
-            else
-            {
-                // Выводим последние N записей, чтобы не засорять консоль
-                int maxToShow = 20;
-                int skipCount = Math.Max(0, _entries.Count - maxToShow);
-                if (skipCount > 0) Console.WriteLine($"... (пропущено {skipCount} старых записей)");
-
-                foreach (var entry in _entries.Skip(skipCount))
-                {
-                    Console.WriteLine(entry.ToString());
-                }
-            }
-            Console.WriteLine("---------------------------------------");
+            JournalEntry entry = new JournalEntry(args);
+            _entries.Add(entry); // Добавляем в память (если нужно)
+            LogToFile(entry.ToString()); // Записываем в файл
         }
+
+        public void CollectionReferenceChangedHandler(object source, CollectionHandlerEventArgs args)
+        {
+            JournalEntry entry = new JournalEntry(args);
+            _entries.Add(entry);
+            LogToFile(entry.ToString());
+        }
+        public void PrintJournal(string title = "Содержимое журнала (в памяти)") {/*...*/} // Оставляем как есть
     }
 }

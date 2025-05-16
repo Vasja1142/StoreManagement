@@ -4,7 +4,7 @@ namespace StoreManagement.Collections
     /// <summary>
     /// Состояние ячейки в хеш-таблице с открытой адресацией.
     /// </summary>
-    internal enum EntryState
+    public enum EntryState
     {
         Empty,    // Ячейка никогда не использовалась
         Occupied, // Ячейка занята данными
@@ -16,7 +16,7 @@ namespace StoreManagement.Collections
     /// </summary>
     /// <typeparam name="TKey">Тип ключа.</typeparam>
     /// <typeparam name="TValue">Тип значения.</typeparam>
-    internal class HashEntry<TKey, TValue>
+    public class HashEntry<TKey, TValue>
     {
         public TKey Key { get; set; }
         public TValue Value { get; set; }
