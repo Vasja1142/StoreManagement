@@ -38,18 +38,19 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(33, 40);
+            label1.Location = new Point(38, 53);
             label1.Name = "label1";
-            label1.Size = new Size(184, 15);
+            label1.Size = new Size(233, 20);
             label1.TabIndex = 0;
             label1.Text = "Выберите поле для сортировки:";
             // 
             // rbSortByName
             // 
             rbSortByName.AutoSize = true;
-            rbSortByName.Location = new Point(33, 74);
+            rbSortByName.Location = new Point(38, 99);
+            rbSortByName.Margin = new Padding(3, 4, 3, 4);
             rbSortByName.Name = "rbSortByName";
-            rbSortByName.Size = new Size(82, 19);
+            rbSortByName.Size = new Size(102, 24);
             rbSortByName.TabIndex = 1;
             rbSortByName.TabStop = true;
             rbSortByName.Text = "По Имени";
@@ -58,9 +59,10 @@
             // rbSortByPrice
             // 
             rbSortByPrice.AutoSize = true;
-            rbSortByPrice.Location = new Point(33, 111);
+            rbSortByPrice.Location = new Point(38, 148);
+            rbSortByPrice.Margin = new Padding(3, 4, 3, 4);
             rbSortByPrice.Name = "rbSortByPrice";
-            rbSortByPrice.Size = new Size(72, 19);
+            rbSortByPrice.Size = new Size(90, 24);
             rbSortByPrice.TabIndex = 2;
             rbSortByPrice.TabStop = true;
             rbSortByPrice.Text = "По Цене";
@@ -69,9 +71,10 @@
             // btnCancel
             // 
             btnCancel.DialogResult = DialogResult.OK;
-            btnCancel.Location = new Point(121, 156);
+            btnCancel.Location = new Point(138, 208);
+            btnCancel.Margin = new Padding(3, 4, 3, 4);
             btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(75, 23);
+            btnCancel.Size = new Size(86, 31);
             btnCancel.TabIndex = 5;
             btnCancel.Text = "Отмена";
             btnCancel.UseVisualStyleBackColor = true;
@@ -80,9 +83,10 @@
             // btnOk
             // 
             btnOk.DialogResult = DialogResult.OK;
-            btnOk.Location = new Point(40, 156);
+            btnOk.Location = new Point(46, 208);
+            btnOk.Margin = new Padding(3, 4, 3, 4);
             btnOk.Name = "btnOk";
-            btnOk.Size = new Size(75, 23);
+            btnOk.Size = new Size(86, 31);
             btnOk.TabIndex = 4;
             btnOk.Text = "ОК";
             btnOk.UseVisualStyleBackColor = true;
@@ -90,14 +94,15 @@
             // 
             // SortOptionsDialog
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(250, 230);
+            ClientSize = new Size(286, 277);
             Controls.Add(btnCancel);
             Controls.Add(btnOk);
             Controls.Add(rbSortByPrice);
             Controls.Add(rbSortByName);
             Controls.Add(label1);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "SortOptionsDialog";
             Text = "SortOptionsDialog";
             ResumeLayout(false);

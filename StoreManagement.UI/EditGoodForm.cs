@@ -227,5 +227,6 @@ namespace StoreManagement.UI
             this.DialogResult = DialogResult.Cancel; // Явно устанавливаем для кнопки Отмена
             this.Close();
         }
+
     }
 }

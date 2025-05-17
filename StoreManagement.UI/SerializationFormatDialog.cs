@@ -43,6 +43,7 @@ namespace StoreManagement.UI
             }
         }
 
+
         // Если для кнопки "Отмена" (например, btnCancel) свойство DialogResult установлено в Cancel
         // в дизайнере, то отдельный обработчик Click для простого закрытия не нужен.
         // private void btnCancel_Click(object sender, EventArgs e)

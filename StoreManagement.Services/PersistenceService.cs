@@ -83,9 +83,6 @@ namespace StoreManagement.Services
             var options = new JsonSerializerOptions
             {
                 WriteIndented = true, // Для читаемости файла
-                // Опции для полиморфизма (если не используются атрибуты [JsonDerivedType])
-                // TypeInfoResolver = new PolymorphicTypeResolver(), // Для .NET 7+
-                // Converters = { new GoodsConverter() } // Для старых версий .NET или сложных случаев
             };
             string jsonString = JsonSerializer.Serialize(list, options);
             File.WriteAllText(filePath, jsonString);
@@ -94,8 +91,6 @@ namespace StoreManagement.Services
         private static void SaveXml<T>(List<T> list, string filePath)
             where T : Goods // Уточнение для XmlSerializer
         {
-            // XmlSerializer требует public конструктор без параметров и public свойства
-            // Для полиморфизма используем [XmlInclude] на базовом классе Goods
             XmlSerializer serializer = new XmlSerializer(typeof(List<T>));
             using (FileStream fs = new FileStream(filePath, FileMode.Create))
             {
