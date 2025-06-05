@@ -65,12 +65,12 @@ graph TD
     Tests -.-> C;
     Tests -.-> D;
 
-    style UI fill:#D5E8D4,stroke:#82B366,stroke-width:2px
-    style ConsoleApp fill:#E6F3FF,stroke:#A9D0F5,stroke-width:2px
-    style S fill:#E0F8E0,stroke:#A9F5A9,stroke-width:2px
-    style C fill:#F8EFE0,stroke:#F5D0A9,stroke-width:2px
-    style D fill:#F5E0F8,stroke:#D0A9F5,stroke-width:2px
-    style Tests fill:#FFF2CC,stroke:#FFD966,stroke-width:2px
+    style UI fill:#000000,stroke:#82B366,stroke-width:2px
+    style ConsoleApp fill:#000000,stroke:#A9D0F5,stroke-width:2px
+    style S fill:#000000,stroke:#D0A9F5,stroke-width:2px
+    style C fill:#000000,stroke:#FFD966,stroke-width:2px
+    style D fill:#000000,stroke:#D0A9F5,stroke-width:2px
+    style Tests fill:#000000,stroke:#FFD966,stroke-width:2px
 ```
 
 ---
